@@ -70,7 +70,7 @@ jobs:
         REPO_URL: https://github.com/Lienol/openwrt
         REPO_BRANCH: 23.05
       run: |
-        git clone --depth 1 $REPO_URL -b $REPO_BRANCH openwrt
+        git clone --depth 1 $REPO_URL -b main openwrt
         cd openwrt
         sed -i '$a src-git smpackage https://github.com/kenzok8/small-package' feeds.conf.default
 
@@ -97,7 +97,7 @@ jobs:
         sed -i 's/luci-theme-bootstrap/luci-theme-argon/g' feeds/luci/collections/luci/Makefile
         sed -i "s/%D %V, %C/openwrt $(date +'%m.%d') by kenzo/g" package/base-files/files/etc/banner
         ./scripts/feeds update -a && ./scripts/feeds install -a
-        cp -f feeds/smpackage/.github/diy/${{matrix.target}}.config .config && make defconfig
+        curl -fSsL https://raw.githubusercontent.com/hscnhs/build_openwrt/master/Lienol.config -o .config && make defconfig
         
     - name: Download package
       working-directory: ./openwrt
