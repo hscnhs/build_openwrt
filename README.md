@@ -1,11 +1,6 @@
 ﻿#### AutoBuild-OpenWrt
 [1]: https://img.shields.io/badge/license-GPLV2-brightgreen.svg
 [2]: /LICENSE
-[3]: https://img.shields.io/badge/PRs-welcome-brightgreen.svg
-![license][1]][2]
-[![GitHub Stars]
-[![GitHub Forks]
-<img src="https://v1.jinrishici.com/all.svg?font-size=24&spacing=3">
 
 ### 默认插件包含:
 
