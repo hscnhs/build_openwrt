@@ -26,8 +26,10 @@ jobs:
       id: compile
       run: |
         git clone https://github.com/miquels/webdav-server-rs
+        git clone https://github.com/miquels/webdav-handler-rs
+        
         cd webdav-server-rs
-        cargo install
+        
         cargo build --release
         cd bin
         echo "FIRMWARE=$PWD" >> $GITHUB_ENV
