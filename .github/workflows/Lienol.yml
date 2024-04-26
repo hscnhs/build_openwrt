@@ -83,7 +83,7 @@ jobs:
       env:
         CONFIG_FILE: '${{matrix.target}}.config'
       run: |
-        [ -e $CONFIG_FILE ] && mv $CONFIG_FILE openwrt/.config
+        curl -fSsL https://raw.githubusercontent.com/hscnhs/build_openwrt/master/Lienol.config -o .config
         chmod +x ./customize.sh && ./customize.sh
         cd openwrt
         rm -rf feeds/packages/lang/golang
@@ -92,11 +92,11 @@ jobs:
         rm -rf feeds/luci/themes/luci-theme-argon && rm -rf feeds/other/{luci-app-adguardhome,luci-app-dockerman}
         rm -rf feeds/lienol/luci-app-fileassistant && rm -rf feeds/packages/net/{adguardhome,smartdns}
         cp -f feeds/smpackage/.github/diy/zzz-default-settings package/default-settings/files/zzz-default-settings
-        cp -f feeds/smpackage/.github/diy/banner package/base-files/files/etc/banner
         sed -i 's/luci-theme-bootstrap/luci-theme-argon/g' feeds/luci/collections/luci/Makefile
         sed -i "s/%D %V, %C/openwrt $(date +'%m.%d')/g" package/base-files/files/etc/banner
+        rm -rf feeds/smpackage/luci-theme-design && git clone -b js --single-branch https://github.com/gngpp/luci-theme-design feeds/smpackage/luci-theme-design
         ./scripts/feeds update -a && ./scripts/feeds install -a
-        curl -fSsL https://raw.githubusercontent.com/hscnhs/build_openwrt/master/Lienol.config -o .config && make defconfig
+        make defconfig
         
     - name: Download package
       working-directory: ./openwrt
