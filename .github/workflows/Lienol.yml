@@ -83,9 +83,9 @@ jobs:
       env:
         CONFIG_FILE: '${{matrix.target}}.config'
       run: |
-        curl -fSsL https://raw.githubusercontent.com/hscnhs/build_openwrt/master/Lienol.config -o .config
         chmod +x ./customize.sh && ./customize.sh
         cd openwrt
+        curl -fSsL https://raw.githubusercontent.com/hscnhs/build_openwrt/master/Lienol.config -o .config
         rm -rf feeds/packages/lang/golang
         git clone https://github.com/kenzok8/golang feeds/packages/lang/golang
         rm -rf feeds/smpackage/{base-files,opkg,ucl,upx,vsftpd-alt,miniupnpd-iptables,wireless-regdb}
