@@ -125,9 +125,11 @@ jobs:
       id: organize
       if: env.UPLOAD_FIRMWARE == 'true' && !cancelled()
       run: |
-        mkdir firmware
+        mkdir -p firmware/packages
         mv -f openwrt/bin/targets/*/*/{*combined*,*rootfs*,*sysupgrade*} ./firmware/ 2>/dev/null || true
-        tar -czvf ./firmware/package.tar.gz openwrt/bin/*/packages/
+        cp -r openwrt/bin/*/packages/* ./firmware/packages/
+        tar -czvf ./firmware/package.tar.gz ./firmware/packages/
+        rm -rf ./firmware/packages/*
         cp openwrt/.config  ./firmware/${{matrix.target}}.config
         cp openwrt/build_dir/target-*/linux-*/linux-*/.config ./firmware/${{matrix.target}}_kernel.config
         cd firmware
