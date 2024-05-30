@@ -127,8 +127,7 @@ jobs:
       run: |
         mkdir firmware
         mv -f openwrt/bin/targets/*/*/{*combined*,*rootfs*,*sysupgrade*} ./firmware/ 2>/dev/null || true
-        mv -f openwrt/bin/*/*/*/*.ipk ./firmware/package/ 2>/dev/null || true
-        tar -czvf ./firmware/package.tar.gz ./firmware/package/
+        tar -czvf ./firmware/package.tar.gz openwrt/bin/*/packages/
         cp openwrt/.config  ./firmware/${{matrix.target}}.config
         cp openwrt/build_dir/target-*/linux-*/linux-*/.config ./firmware/${{matrix.target}}_kernel.config
         cd firmware
