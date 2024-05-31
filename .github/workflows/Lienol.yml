@@ -116,7 +116,7 @@ jobs:
 
     - name: Upload bin directory
       uses: actions/upload-artifact@main
-      if: steps.compile.outputs.status == 'success' && env.UPLOAD_BIN_DIR == 'true'
+      if: steps.compile.outputs.status == 'success'
       with:
         name: OpenWrt_bin${{ env.DEVICE_NAME }}${{ env.FILE_DATE }}
         path: openwrt/bin
@@ -127,7 +127,7 @@ jobs:
       run: |
         mkdir firmware
         mv -f openwrt/bin/targets/*/*/{*combined*,*rootfs*,*sysupgrade*} ./firmware/ 2>/dev/null || true
-        tar -czvf openwrt/bin/x86_64/packages/ ./firmware/packages.tar.gz 2>/dev/null || true
+        tar -czvf openwrt/bin/*/*/packages/ ./firmware/packages.tar.gz 2>/dev/null || true
         cp openwrt/.config  ./firmware/${{matrix.target}}.config
         cp openwrt/build_dir/target-*/linux-*/linux-*/.config ./firmware/${{matrix.target}}_kernel.config
         cd firmware
