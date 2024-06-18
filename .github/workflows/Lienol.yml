@@ -21,11 +21,6 @@ env:
   UPLOAD_COWTRANSFER: false
   UPLOAD_WETRANSFER: false
   UPLOAD_RELEASE: true
-  SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-  REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
-  REMOTE_PORT: ${{ secrets.REMOTE_PORT }}
-  DOCKER_ID: ${{ secrets.DOCKER_ID }}
-  DOCKER_PASSWD: ${{ secrets.DOCKER_PASSWD }}
   TZ: Asia/Shanghai
 
 jobs:
@@ -130,7 +125,7 @@ jobs:
         mv -f openwrt/bin/targets/*/*/{*combined*,*rootfs*,*sysupgrade*} ./firmware/ 2>/dev/null || true
         cp -rf $(find openwrt/bin/targets/ -type f -name "*.ipk") ./firmware/package/ 2>/dev/null || true
         cp -rf $(find openwrt/bin/packages/ -type f -name "*.ipk") ./firmware/package/ 2>/dev/null || true
-        tar -czvf ./firmware/package/ ./firmware/packages.tar.gz 2>/dev/null || true
+        tar -czvf ./firmware/packages.tar.gz ./firmware/package/ 2>/dev/null || true
         rm -rf ./firmware/package
         cp openwrt/.config  ./firmware/${{matrix.target}}.config
         cp openwrt/build_dir/target-*/linux-*/linux-*/.config ./firmware/${{matrix.target}}_kernel.config
