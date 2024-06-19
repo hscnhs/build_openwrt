@@ -102,7 +102,7 @@ jobs:
       working-directory: ./openwrt
       run: |
         bash <(curl -fsSL https://raw.githubusercontent.com/chenmozhijin/turboacc/luci/add_turboacc.sh)
-        curl -fsSL https://raw.githubusercontent.com/coolsnowwolf/packages/master/net/xtables-addons/patches/211-fix-build-with-kernel-6.6.patch -o package/feeds/packages/net/xtables-addons/patches/211-fix-build-with-kernel-6.6.patch
+        curl -fsSL https://raw.githubusercontent.com/coolsnowwolf/packages/master/net/xtables-addons/patches/211-fix-build-with-kernel-6.6.patch -o feeds/packages/net/xtables-addons/patches/211-fix-build-with-kernel-6.6.patch
         echo -e "$(($(nproc)+1)) thread compile"
         make -j$(($(nproc)+1)) || make -j1 V=s
         make package/install -j $(($(nproc)+1))
