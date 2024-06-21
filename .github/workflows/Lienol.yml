@@ -78,7 +78,7 @@ jobs:
       run: |
         chmod +x ./customize.sh && ./customize.sh
         cd openwrt
-        curl -fSsL https://raw.githubusercontent.com/hscnhs/build_openwrt/master/Lienol.config -o .config
+        curl -fSsL https://raw.githubusercontent.com/hscnhs/build_openwrt/master/x86-64.config -o .config
         rm -rf feeds/packages/lang/golang
         git clone https://github.com/kenzok8/golang feeds/packages/lang/golang
         rm -rf feeds/smpackage/{base-files,opkg,ucl,upx,vsftpd-alt,miniupnpd-iptables,wireless-regdb}
@@ -89,7 +89,6 @@ jobs:
         sed -i "s/%D %V, %C/openwrt $(date +'%m.%d')/g" package/base-files/files/etc/banner
         rm -rf feeds/smpackage/luci-theme-design && git clone -b js --single-branch https://github.com/gngpp/luci-theme-design feeds/smpackage/luci-theme-design
         ./scripts/feeds update -a && ./scripts/feeds install -a
-        make defconfig
         
     - name: Download package
       working-directory: ./openwrt
