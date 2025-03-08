@@ -8,7 +8,7 @@ env:
 jobs:
   build:
 
-    runs-on: debian-latest
+    runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v3
@@ -22,8 +22,9 @@ jobs:
         sudo -E apt-get -qq clean
         curl -1sLf 'https://dl.cloudsmith.io/public/caddy/xcaddy/gpg.key' | sudo gpg --dearmor -o /usr/share/keyrings/caddy-xcaddy-archive-keyring.gpg
         curl -1sLf 'https://dl.cloudsmith.io/public/caddy/xcaddy/debian.deb.txt' | sudo tee /etc/apt/sources.list.d/caddy-xcaddy.list
+        sudo add-apt-repository ppa:longsleep/golang-backports
         sudo apt update
-        sudo apt install golang xcaddy
+        sudo apt install golang-go xcaddy
     
     - name: Build
       id: compile
