@@ -20,18 +20,18 @@ jobs:
         sudo -E apt-get -qq install git
         sudo -E apt-get -qq autoremove --purge
         sudo -E apt-get -qq clean
-        sudo apt install rustc cargo libpam0g-dev
+        curl -1sLf 'https://dl.cloudsmith.io/public/caddy/xcaddy/gpg.key' | sudo gpg --dearmor -o /usr/share/keyrings/caddy-xcaddy-archive-keyring.gpg
+        curl -1sLf 'https://dl.cloudsmith.io/public/caddy/xcaddy/debian.deb.txt' | sudo tee /etc/apt/sources.list.d/caddy-xcaddy.list
+        sudo apt update
+        sudo apt install golang xcaddy
     
     - name: Build
       id: compile
       run: |
-        git clone https://github.com/miquels/webdav-server-rs
-        git clone https://github.com/miquels/webdav-handler-rs
-        
-        cd webdav-server-rs
-        
-        cargo build --release
-        cd bin
+        mkdir /work
+        cd /work
+        xcaddy build --with github.com/corazawaf/coraza-caddy/v2
+
         echo "FIRMWARE=$PWD" >> $GITHUB_ENV
     
     - name: Upload firmware to release
@@ -41,4 +41,4 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}
       with:
         files: "${{ env.FIRMWARE }}/*"
-        name: "webdav"
+        name: "file"
