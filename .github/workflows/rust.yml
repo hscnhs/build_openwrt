@@ -33,10 +33,17 @@ jobs:
         xcaddy build --with github.com/corazawaf/coraza-caddy/v2
 
         echo "FIRMWARE=$PWD" >> $GITHUB_ENV
-    
+   
+    - name: Upload firmware directory
+      uses: actions/upload-artifact@main
+      if: steps.organize.outputs.status == 'success' && !cancelled()
+      with:
+        name: "file"
+        path: ${{ env.FIRMWARE }}  
+
     - name: Upload firmware to release
       uses: softprops/action-gh-release@master
-      if: steps.compile.outputs.status == 'success' && !cancelled()
+      if: steps.tag.outputs.status == 'success' && !cancelled()
       env:
         GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}
       with:
