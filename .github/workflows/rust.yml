@@ -29,8 +29,7 @@ jobs:
     - name: Build
       id: compile
       run: |
-        mkdir /work
-        cd /work
+        
         xcaddy build --with github.com/corazawaf/coraza-caddy/v2
 
         echo "FIRMWARE=$PWD" >> $GITHUB_ENV
