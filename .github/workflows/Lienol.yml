@@ -25,7 +25,7 @@ env:
 
 jobs:
   merge:
-    runs-on: Ubuntu-22.04
+    runs-on: Ubuntu-latest
     if: github.event.repository.owner.id == github.event.sender.id
 
     name: Build ${{matrix.target}}
@@ -78,7 +78,7 @@ jobs:
       run: |
         chmod +x ./customize.sh && ./customize.sh
         cd openwrt
-        curl -fSsL https://raw.githubusercontent.com/hscnhs/build_openwrt/master/x86-64.config -o .config
+        curl -fSsL https://raw.bgithub.xyz/hscnhs/build_openwrt/master/x86-64.config -o .config
         rm -rf feeds/packages/lang/golang
         git clone https://github.com/kenzok8/golang feeds/packages/lang/golang
         rm -rf feeds/smpackage/{base-files,opkg,ucl,upx,vsftpd-alt,miniupnpd-iptables,wireless-regdb}
@@ -100,8 +100,8 @@ jobs:
     - name: Compile the firmware
       working-directory: ./openwrt
       run: |
-        bash <(curl -fsSL https://raw.githubusercontent.com/chenmozhijin/turboacc/luci/add_turboacc.sh)
-        curl -fsSL https://raw.githubusercontent.com/coolsnowwolf/packages/master/net/xtables-addons/patches/211-fix-build-with-kernel-6.6.patch -o feeds/packages/net/xtables-addons/patches/211-fix-build-with-kernel-6.6.patch
+        
+        curl -fsSL https://raw.bgithub.xyz/coolsnowwolf/packages/master/net/xtables-addons/patches/211-fix-build-with-kernel-6.6.patch -o feeds/packages/net/xtables-addons/patches/211-fix-build-with-kernel-6.6.patch
         make clean
         export TERM=xterm
         echo -e "$(($(nproc)+1)) thread compile"
