@@ -2,6 +2,13 @@ name: Rust
 on:
   repository_dispatch:
   workflow_dispatch:
+    inputs:
+      build_modules:
+        description: 'Build modules (separate multiple options with spaces)'
+        required: false
+        default: 'github.com/corazawaf/coraza-caddy/v2 github.com/caddy-dns/cloudflare github.com/caddy-dns/dynv6'
+        type: string
+    
 env:
   CARGO_TERM_COLOR: always
 
@@ -30,7 +37,7 @@ jobs:
       id: compile
       run: |
         
-        xcaddy build --with github.com/corazawaf/coraza-caddy/v2
+        xcaddy build --with ${{ github.event.inputs.build_modules }}
 
         echo "FIRMWARE=$PWD" >> $GITHUB_ENV
    
