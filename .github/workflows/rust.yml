@@ -36,8 +36,9 @@ jobs:
     - name: Build
       id: compile
       run: | 
-        modules=`echo "${{ github.event.inputs.build_modules }}" | awk '{match($0, /[ ]*$/); end=substr($0,RSTART,RLENGTH); main=substr($0,1,RSTART-1); gsub(/  +/," ",main); gsub(/ /,"--with ",main); print main end}'
-        xcaddy build --with $modules
+        
+        xcaddy build --with github.com/corazawaf/coraza-caddy/v2 --with github.com/caddy-dns/cloudflare --with github.com/caddy-dns/dynv6 --with github.com/greenpau/caddy-security --with github.com/aksdb/caddy-cgi --with github.com/Wafris/wafris-caddy --with github.com/caddy-dns/route53
+        echo "TAG=`./caddy version`" >> $GITHUB_ENV
         echo "FIRMWARE=$PWD" >> $GITHUB_ENV
    
     - name: Upload firmware directory
@@ -52,4 +53,5 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}
       with:
         files: "${{ env.FIRMWARE }}/*"
-        name: "file"
+        name: "Caddy"
+        tag_name: "${{ env.TAG }}"
