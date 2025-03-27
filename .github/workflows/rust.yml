@@ -37,7 +37,7 @@ jobs:
       id: compile
       run: | 
         
-        xcaddy build --with github.com/corazawaf/coraza-caddy/v2 --with github.com/caddy-dns/cloudflare --with github.com/caddy-dns/dynv6 --with github.com/greenpau/caddy-security --with github.com/aksdb/caddy-cgi --with github.com/Wafris/wafris-caddy --with github.com/caddy-dns/route53
+        xcaddy build --with github.com/corazawaf/coraza-caddy/v2 --with github.com/caddy-dns/cloudflare --with github.com/caddy-dns/dynv6 --with github.com/greenpau/caddy-security --with github.com/aksdb/caddy-cgi/v2 --with github.com/Wafris/wafris-caddy --with github.com/caddy-dns/route53
         echo "TAG=`./caddy version`" >> $GITHUB_ENV
         echo "FIRMWARE=$PWD" >> $GITHUB_ENV
    
