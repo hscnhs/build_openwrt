@@ -36,7 +36,7 @@ jobs:
     - name: Build
       id: compile
       run: | 
-        modules=`echo "${{ github.event.inputs.build_modules }}" | awk 'match($0,/(.*[^ ])( *)$/,a){gsub(/ /,"--with ",a); $0=a a} 1'`
+        modules=`echo "${{ github.event.inputs.build_modules }}" | awk '{match($0, /[ ]*$/); end=substr($0,RSTART,RLENGTH); main=substr($0,1,RSTART-1); gsub(/  +/," ",main); gsub(/ /,"--with ",main); print main end}'
         xcaddy build --with $modules
         echo "FIRMWARE=$PWD" >> $GITHUB_ENV
    
