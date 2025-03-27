@@ -35,9 +35,9 @@ jobs:
     
     - name: Build
       id: compile
-      run: |
-        
-        xcaddy build --with `echo ${{ github.event.inputs.build_modules }} | awk 'match($0,/(.*[^ ])( *)$/,a){gsub(/ /,"--with ",a); $0=a a} 1'`
+      run: | 
+        modules=`echo ${{ github.event.inputs.build_modules }} | awk 'match($0,/(.*[^ ])( *)$/,a){gsub(/ /,"--with ",a); $0=a a} 1'`
+        xcaddy build --with $modules
         echo "FIRMWARE=$PWD" >> $GITHUB_ENV
    
     - name: Upload firmware directory
