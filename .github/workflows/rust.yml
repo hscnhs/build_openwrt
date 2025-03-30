@@ -21,12 +21,7 @@ jobs:
     - uses: actions/checkout@v3
     - name: Initialization environment
       run: |
-        sudo rm -rf /etc/apt/sources.list.d/* /usr/share/dotnet /usr/local/lib/android /opt/ghc /opt/hostedtoolcache/CodeQL
-        sudo docker image prune --all --force
-        sudo -E apt-get -qq update
-        sudo -E apt-get -qq install git
-        sudo -E apt-get -qq autoremove --purge
-        sudo -E apt-get -qq clean
+        
         curl -1sLf 'https://dl.cloudsmith.io/public/caddy/xcaddy/gpg.key' | sudo gpg --dearmor -o /usr/share/keyrings/caddy-xcaddy-archive-keyring.gpg
         curl -1sLf 'https://dl.cloudsmith.io/public/caddy/xcaddy/debian.deb.txt' | sudo tee /etc/apt/sources.list.d/caddy-xcaddy.list
         sudo add-apt-repository ppa:longsleep/golang-backports
@@ -37,8 +32,8 @@ jobs:
       id: compile
       run: | 
         
-        xcaddy build --with github.com/corazawaf/coraza-caddy/v2 --with github.com/caddy-dns/cloudflare --with github.com/caddy-dns/dynv6 --with github.com/greenpau/caddy-security --with github.com/aksdb/caddy-cgi/v2 --with github.com/Wafris/wafris-caddy --with github.com/caddy-dns/route53
-        echo "TAG=`./caddy version`" >> $GITHUB_ENV
+        xcaddy build --with github.com/corazawaf/coraza-caddy/v2 --with github.com/caddy-dns/cloudflare --with github.com/caddy-dns/dynv6 --with github.com/greenpau/caddy-security --with github.com/aksdb/caddy-cgi/v2 --with github.com/Wafris/wafris-caddy --with github.com/caddy-dns/cloudns
+        
         echo "FIRMWARE=$PWD" >> $GITHUB_ENV
    
     - name: Upload firmware directory
@@ -46,12 +41,3 @@ jobs:
       with:
         name: "file"
         path: ${{ env.FIRMWARE }}  
-
-    - name: Upload firmware to release
-      uses: softprops/action-gh-release@master
-      env:
-        GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}
-      with:
-        files: "${{ env.FIRMWARE }}/*"
-        name: "Caddy"
-        tag_name: "${{ env.TAG }}"
