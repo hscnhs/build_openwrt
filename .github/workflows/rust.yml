@@ -35,7 +35,9 @@ jobs:
         xcaddy build --with github.com/corazawaf/coraza-caddy/v2 --with github.com/caddy-dns/cloudflare --with github.com/mholt/caddy-webdav --with github.com/greenpau/caddy-security --with github.com/aksdb/caddy-cgi/v2 --with github.com/Wafris/wafris-caddy
 
         git clone https://github.com/usememos/memos.git
-        go build memos/cmd/memos -o memos
+        cd memos 
+        go build ./cmd/memos -o memos || echo 'failed'
+        cd ..
         mkdir firmware && cd firmware
         cp ../caddy . || echo 'failed'
         cp ../memos . || echo 'failed'
