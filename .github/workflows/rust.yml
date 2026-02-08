@@ -26,14 +26,19 @@ jobs:
         curl -1sLf 'https://dl.cloudsmith.io/public/caddy/xcaddy/debian.deb.txt' | sudo tee /etc/apt/sources.list.d/caddy-xcaddy.list
         sudo add-apt-repository ppa:longsleep/golang-backports
         sudo apt update
-        sudo apt install golang-go xcaddy
+        sudo apt install golang-go xcaddy git
     
     - name: Build
       id: compile
       run: | 
-        
+        mkdir work && cd work
         xcaddy build --with github.com/corazawaf/coraza-caddy/v2 --with github.com/caddy-dns/cloudflare --with github.com/mholt/caddy-webdav --with github.com/greenpau/caddy-security --with github.com/aksdb/caddy-cgi/v2 --with github.com/Wafris/wafris-caddy
-        
+
+        git clone https://github.com/usememos/memos.git
+        go build memos/cmd/memos -o memos
+        mkdir firmware && cd firmware
+        cp ../caddy . || echo 'failed'
+        cp ../memos . || echo 'failed'
         echo "FIRMWARE=$PWD" >> $GITHUB_ENV
    
     - name: Upload firmware directory
