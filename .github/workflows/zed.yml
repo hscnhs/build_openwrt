@@ -1,0 +1,65 @@
+name: Build Zed for aarch64-musl
+
+on:
+  workflow_dispatch:   # 支持手动触发
+
+jobs:
+  build:
+    runs-on: ubuntu-latest-arm
+    timeout-minutes: 180   # 编译耗时较长，设置充足的超时
+
+    steps:
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            build-essential cmake pkg-config \
+            libssl-dev \
+            git
+
+      - name: Setup Zig
+        uses: mlugg/setup-zig@v1
+        with:
+          version: latest   # 获取最新 Zig
+
+      - name: Setup Rust
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          target: aarch64-unknown-linux-musl   # 仅用于 Rust 工具链本身，zigbuild 会使用 zig
+          override: true
+
+      - name: Install cargo-zigbuild
+        run: cargo install cargo-zigbuild
+
+      - name: Checkout Zed latest stable tag
+        run: |
+          git clone --filter=blob:none https://github.com/zed-industries/zed.git
+          cd zed
+          # 获取所有标签并按语义版本排序，选取最新的稳定版标签
+          git fetch --tags
+          latest_tag=$(git tag --sort=-v:refname | head -n 1)
+          echo "Latest stable tag: $latest_tag"
+          git checkout "$latest_tag"
+          echo "ZED_DIR=$(pwd)" >> $GITHUB_ENV
+
+      - name: Build with cargo-zigbuild (release, aarch64-unknown-musl)
+        run: |
+          cd "$ZED_DIR"
+          # 使用 zig 作为链接器，C 编译器，交叉编译到 aarch64-unknown-musl
+          cargo zigbuild --release --target aarch64-unknown-musl
+
+      - name: Package binary
+        run: |
+          cd "$ZED_DIR"
+          mkdir -p package
+          # Zed 主二进制名为 `zed` (可根据实际调整，一般即如此)
+          cp target/aarch64-unknown-musl/release/zed package/
+          # 可选：复制其他资源（如配置、图标等），此处仅打包二进制
+          tar -czvf zed-aarch64-musl.tar.gz -C package zed
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: zed-aarch64-musl
+          path: ${{ env.ZED_DIR }}/zed-aarch64-musl.tar.gz
